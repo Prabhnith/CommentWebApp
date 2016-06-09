@@ -12,9 +12,9 @@ var Comment = React.createClass({
   render: function() {
     return (
       <div className="comment">
-        <h2 className="commentAuthor">
+        <h3 className="commentAuthor">
           {this.props.author}
-        </h2>
+        </h3>
         <span dangerouslySetInnerHTML={this.rawMarkup()} />
       </div>
     );
@@ -62,13 +62,16 @@ var CommentForm = React.createClass({
 		if (!text || !author){
 			return;
 		}
+	  this.props.onCommentSubmit({author: author, text: text});
 		commentData = this.props.commentData.concat([{author, text}]);
 		localStorage.setItem('todos', JSON.stringify(commentData));
+		this.setState({ author:'', text:''});
 		// TODO: Here you may send reqdata = data.concat([{id, task, complete}]);uest to the server
 	},
   render: function() {
     return (
-      <form className="commentForm">
+      <form className="commentForm form-horizontal container">
+				<div className="form-group col-md-10 container">
 					<input type="text" placeholder="type your name"
 					 			 value={this.state.author}
 								 onChange={this.handleAuthorchange} />
@@ -78,7 +81,8 @@ var CommentForm = React.createClass({
 								 onChange={this.handleTextchange} />
 	        <br />
 					<input type="submit" value="post" onSubmit={this.handleSubmit} />
-      </form>
+				</div>
+		</form>
 			);
 	}
 });
@@ -96,9 +100,11 @@ var CommentBox = React.createClass({
 	},
 	render: function(){
 		return(
-			<div className="commentBox">
-			<h1>Comments</h1>
-					<CommentList data={this.props.commentData}/>
+			<div className="commentBox well ">
+				<div className="header ">
+					<h1 className="vert-offset-top-0 jumbotron"	>Comments</h1>
+				</div>
+				<CommentList data={this.props.commentData}/>
 					<CommentForm onCommentSubmit={this.handleCommentSubmit}/>
    		</div>
 		);
